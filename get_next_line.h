@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pdelefos <pdelefos@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fifiblop <fifiblop@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/23 16:22:52 by pdelefos          #+#    #+#             */
-/*   Updated: 2015/12/23 18:58:22 by pdelefos         ###   ########.fr       */
+/*   Updated: 2015/12/26 16:30:26 by fifiblop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@
 # define BUFF_SIZE 32
 
 int		get_next_line(int const fd, char **line);
+
 void	ft_putstr(char *str);
+void	ft_putnbr(int nb);
 
 #endif

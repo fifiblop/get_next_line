@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pdelefos <pdelefos@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fifiblop <fifiblop@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/23 16:22:17 by pdelefos          #+#    #+#             */
-/*   Updated: 2015/12/23 19:02:18 by pdelefos         ###   ########.fr       */
+/*   Updated: 2015/12/26 16:30:37 by fifiblop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,23 +15,34 @@
 int		get_next_line(int const fd, char **line)
 {
 	int ret;
+	char *str;
 
-	ret = read(fd, line, BUFF_SIZE);
-	*line[ret] = '\0';
-	ft_putstr(*line);
-	return (0);
+	(void)line;
+	str = "";
+	ret = read(fd, str, BUFF_SIZE);
+	if (ret > 0)
+	{
+		ft_putnbr(ret);
+		str[ret] = '\0';
+		ft_putstr(str);
+		return (1);
+	}
+	return (ret);
 }
 
 int		main(int ac, char **av)
 {
 	int		fd;
-	char	**c;
+	int		ret;
+	char	c[BUFF_SIZE + 1];
 
-	c = NULL;
 	if (ac == 2)
 	{
 		fd = open(av[1], O_RDONLY);
-		get_next_line(fd, c);
+		ret = read(fd, c, BUFF_SIZE);
+		c[ret] = '\0';
+		ft_putstr(c);
+		// get_next_line(fd, c);
 		// ft_putstr(*c);
 	}
 	return 0;

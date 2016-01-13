@@ -6,7 +6,7 @@
 /*   By: pdelefos <pdelefos@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/23 16:22:17 by pdelefos          #+#    #+#             */
-/*   Updated: 2016/01/13 17:07:54 by pdelefos         ###   ########.fr       */
+/*   Updated: 2016/01/13 19:26:18 by pdelefos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ int		get_next_line(int const fd, char **line)
 {
 	int		ret;
 	char	*str;
-	static int	yo;
 
 	line = (char**)malloc(sizeof(char*));
 	if (!(*line = (char*)malloc(sizeof(char))))
@@ -29,10 +28,7 @@ int		get_next_line(int const fd, char **line)
 		if (ft_strchr(*line, '\n') != NULL)
 		{
 			*line = ft_strsplit(*line, '\n')[0];
-			yo += ft_strlen(*line);
 			ft_putstr(*line);
-			/*ft_putnbr(yo);*/
-			ft_putchar('\n');
 			return (ret);
 		}
 	}
@@ -49,9 +45,9 @@ int		main(int ac, char **av)
 		c = NULL;
 		fd = open(av[1], O_RDONLY);
 		get_next_line(fd, c);
-		get_next_line(fd, c);
-		get_next_line(fd, c);
-		get_next_line(fd, c);
+		/*get_next_line(fd, c);*/
+		/*get_next_line(fd, c);*/
+		/*get_next_line(fd, c);*/
 	}
-	return 0;
+	return (0);
 }

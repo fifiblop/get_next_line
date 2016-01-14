@@ -6,7 +6,7 @@
 /*   By: pdelefos <pdelefos@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/23 16:22:52 by pdelefos          #+#    #+#             */
-/*   Updated: 2016/01/13 16:36:01 by pdelefos         ###   ########.fr       */
+/*   Updated: 2016/01/14 15:57:42 by pdelefos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 # include <fcntl.h>
 # include <stdlib.h>
 
-# define BUFF_SIZE 4
+# define BUFF_SIZE 6
 
 int		get_next_line(int const fd, char **line);
 

@@ -6,7 +6,7 @@
 /*   By: pdelefos <pdelefos@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/23 16:22:17 by pdelefos          #+#    #+#             */
-/*   Updated: 2016/01/13 19:26:18 by pdelefos         ###   ########.fr       */
+/*   Updated: 2016/01/14 15:57:58 by pdelefos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,15 @@ int		get_next_line(int const fd, char **line)
 	while ((ret = read(fd, str, BUFF_SIZE)))
 	{
 		str[ret] = '\0';
+		/*ft_putstr("--");*/
+		/*ft_putendl(str);*/
 		*line = ft_strjoin(*line, str);
+		/*ft_putendl(*line);*/
 		if (ft_strchr(*line, '\n') != NULL)
 		{
-			*line = ft_strsplit(*line, '\n')[0];
-			ft_putstr(*line);
+			/**line = ft_strsplit(*line, '\n')[0];*/
+			ft_putstr("00");
+			ft_putendl(*line);
 			return (ret);
 		}
 	}

@@ -6,7 +6,7 @@
 /*   By: pdelefos <pdelefos@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/23 16:22:52 by pdelefos          #+#    #+#             */
-/*   Updated: 2016/01/14 15:57:42 by pdelefos         ###   ########.fr       */
+/*   Updated: 2016/01/19 14:28:52 by pdelefos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,13 @@
 # include <stdlib.h>
 
 # define BUFF_SIZE 6
+
+typedef struct	s_data
+{
+	char		*tmp;
+	char		*line;
+	char		*last;
+}				t_data;
 
 int		get_next_line(int const fd, char **line);
 

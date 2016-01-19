@@ -6,52 +6,54 @@
 /*   By: pdelefos <pdelefos@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/23 16:22:17 by pdelefos          #+#    #+#             */
-/*   Updated: 2016/01/14 15:57:58 by pdelefos         ###   ########.fr       */
+/*   Updated: 2016/01/19 18:33:43 by pdelefos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
+char	*str_cleanjoin(char *s1, char *s2)
+{
+	char *str;
+
+	str = ft_strjoin(s1, s2);
+	ft_putstr("hello");
+	free(s1);
+	return (str);
+}
+
+
 int		get_next_line(int const fd, char **line)
 {
 	int		ret;
-	char	*str;
+	char	buff[BUFF_SIZE + 1];
 
-	line = (char**)malloc(sizeof(char*));
-	if (!(*line = (char*)malloc(sizeof(char))))
-		return (-1);
-	str = (char*)malloc(sizeof(char) * (BUFF_SIZE + 1));
-	while ((ret = read(fd, str, BUFF_SIZE)))
+	/*if (!line || BUFF_SIZE <= 0 || fd < 0)*/
+		/*return (-1);*/
+	(void)line;
+	while ((ret = read(fd, buff, BUFF_SIZE)))
 	{
-		str[ret] = '\0';
-		/*ft_putstr("--");*/
-		/*ft_putendl(str);*/
-		*line = ft_strjoin(*line, str);
-		/*ft_putendl(*line);*/
-		if (ft_strchr(*line, '\n') != NULL)
-		{
-			/**line = ft_strsplit(*line, '\n')[0];*/
-			ft_putstr("00");
-			ft_putendl(*line);
-			return (ret);
-		}
+		buff[ret] = '\0';
+		ft_putstr(buff);
+		/**line = str_cleanjoin(*line, buff);*/
+		if (ft_strchr(buff, '\n') != NULL)
+			return (0);
 	}
-	return (ret);
+	return (0);
 }
 
 int		main(int ac, char **av)
 {
 	int		fd;
+	int		gnl;
 	char	**c;
 
 	if (ac == 2)
 	{
 		c = NULL;
 		fd = open(av[1], O_RDONLY);
-		get_next_line(fd, c);
-		/*get_next_line(fd, c);*/
-		/*get_next_line(fd, c);*/
-		/*get_next_line(fd, c);*/
+		gnl = get_next_line(fd, c);
+
 	}
 	return (0);
 }

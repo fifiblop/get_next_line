@@ -6,7 +6,7 @@
 /*   By: pdelefos <pdelefos@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/23 16:22:52 by pdelefos          #+#    #+#             */
-/*   Updated: 2016/01/19 14:28:52 by pdelefos         ###   ########.fr       */
+/*   Updated: 2016/01/20 20:45:51 by pdelefos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,14 +19,7 @@
 # include <fcntl.h>
 # include <stdlib.h>
 
-# define BUFF_SIZE 6
-
-typedef struct	s_data
-{
-	char		*tmp;
-	char		*line;
-	char		*last;
-}				t_data;
+# define BUFF_SIZE 1
 
 int		get_next_line(int const fd, char **line);
 
@@ -35,9 +28,11 @@ void	ft_putendl(char *str);
 void	ft_putchar(char c);
 void	ft_putnbr(int nb);
 char	**ft_strsplit(char const *s, char c);
+char	*ft_strnew(size_t size);
 char	*ft_strcpy(char *dst, const char *src);
 char	*ft_strjoin(char const *s1, char const *s2);
 char	*ft_strsub(char const *s, unsigned int start, size_t len);
+char	*ft_strdup(const char *s1);
 char	*ft_strchr(const char *s, int c);
 int		ft_strlen(char *str);
 

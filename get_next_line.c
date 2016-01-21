@@ -6,7 +6,7 @@
 /*   By: pdelefos <pdelefos@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/23 16:22:17 by pdelefos          #+#    #+#             */
-/*   Updated: 2016/01/20 20:48:11 by pdelefos         ###   ########.fr       */
+/*   Updated: 2016/01/21 16:50:56 by pdelefos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,9 @@ char	*str_clnjoin(char *s1, char *s2)
 	return (merged);
 }
 
-int		sizeofline(char *buff)
+int		sizeofline(char *buff, char *last_nl)
 {
-	char *pos;
-
-	if ((pos = ft_strchr(buff, '\n')))
-		return (ft_strlen(buff) - ft_strlen(pos));
-	return (0);
+	return (ft_strlen(buff) - ft_strlen(last_nl));
 }
 
 char	*get_last(char **last_nl, char **line)
@@ -38,9 +34,7 @@ char	*get_last(char **last_nl, char **line)
 	tmp = *last_nl;
 	if ((tmp = ft_strchr(*last_nl, '\n')) != NULL)
 	{
-		*tmp = '\0';
-		size = ft_strlen(*last_nl);
-		*tmp = '\n';
+		size = sizeofline(*last_nl, tmp);
 		*line = ft_strsub(*last_nl, 0, size);
 		return (*last_nl + size);
 	}
@@ -50,20 +44,16 @@ char	*get_last(char **last_nl, char **line)
 
 int		split_buff(char *buff, char **last_nl, char **line)
 {
-	/*int	linesize;*/
-
 	if ((*last_nl = ft_strchr(buff, '\n')) != NULL)
 	{
-		/*linesize = sizeofline(buff);*/
-		/**last_nl = ft_strsub(buff, linesize, ft_strlen(*last_nl) + 1);*/
-		*last_nl = ft_strsub(buff, ft_strlen(buff) - ft_strlen(*last_nl), 
-					ft_strlen(*last_nl));
+		*last_nl = ft_strsub(buff, sizeofline(buff, *last_nl),
+					ft_strlen(*last_nl)) + 1;
 		if (*line)
-			*line = ft_strjoin(*line, ft_strsub(buff, 0, ft_strlen(buff)
-					- ft_strlen(*last_nl)));
+			*line = ft_strjoin(*line, ft_strsub(buff, 0,
+					sizeofline(buff, *last_nl) - 1));
 		else
-			*line = ft_strdup(ft_strsub(buff, 0, ft_strlen(buff)
-					- ft_strlen(*last_nl)));
+			*line = ft_strdup(ft_strsub(buff, 0,
+					sizeofline(buff, *last_nl) - 1));
 		return (1);
 	}
 	if (*line)
@@ -95,25 +85,6 @@ int		get_next_line(int const fd, char **line)
 		buff[ret] = '\0';
 		if (split_buff(buff, &last_nl, line) == 1)
 			return (1);
-	}
-	return (0);
-}
-
-int		main(int ac, char **av)
-{
-	char	*line;
-	int		fd;
-	int		gnl;
-
-	if (ac == 2)
-	{
-		fd = open(av[1], O_RDONLY);
-		gnl = get_next_line(fd, &line);
-		ft_putnbr(gnl);
-		ft_putendl(line);
-		gnl = get_next_line(fd, &line);
-		ft_putnbr(gnl);
-		ft_putendl(line);
 	}
 	return (0);
 }

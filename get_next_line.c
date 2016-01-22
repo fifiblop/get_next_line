@@ -6,7 +6,7 @@
 /*   By: pdelefos <pdelefos@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/23 16:22:17 by pdelefos          #+#    #+#             */
-/*   Updated: 2016/01/21 16:50:56 by pdelefos         ###   ########.fr       */
+/*   Updated: 2016/01/22 14:10:12 by pdelefos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ int		split_buff(char *buff, char **last_nl, char **line)
 		*last_nl = ft_strsub(buff, sizeofline(buff, *last_nl),
 					ft_strlen(*last_nl)) + 1;
 		if (*line)
-			*line = ft_strjoin(*line, ft_strsub(buff, 0,
+			*line = str_clnjoin(*line, ft_strsub(buff, 0,
 					sizeofline(buff, *last_nl) - 1));
 		else
 			*line = ft_strdup(ft_strsub(buff, 0,
@@ -57,7 +57,7 @@ int		split_buff(char *buff, char **last_nl, char **line)
 		return (1);
 	}
 	if (*line)
-		*line = ft_strjoin(*line, buff);
+		*line = str_clnjoin(*line, buff);
 	else
 		*line = ft_strdup(buff);
 	return (0);
@@ -69,7 +69,8 @@ int		get_next_line(int const fd, char **line)
 	int			ret;
 	char		buff[BUFF_SIZE + 1];
 
-	if (!line || fd < 0 || BUFF_SIZE < 1)
+	if (fd < 0 || BUFF_SIZE < 1 || line == NULL ||
+		(*line = ft_strnew(BUFF_SIZE + 1)) == NULL)
 		return (-1);
 	if (last_nl)
 	{
@@ -80,11 +81,13 @@ int		get_next_line(int const fd, char **line)
 			return (1);
 		}
 	}
-	while ((ret = read(fd, buff, BUFF_SIZE)))
+	while ((ret = read(fd, buff, BUFF_SIZE)) > 0)
 	{
 		buff[ret] = '\0';
 		if (split_buff(buff, &last_nl, line) == 1)
 			return (1);
 	}
-	return (0);
+	if (ret == 0)
+		return (0);
+	return (-1);
 }

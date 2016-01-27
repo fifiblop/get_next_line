@@ -3,91 +3,111 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pdelefos <pdelefos@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pdelefos <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2015/12/23 16:22:17 by pdelefos          #+#    #+#             */
-/*   Updated: 2016/01/22 14:10:12 by pdelefos         ###   ########.fr       */
+/*   Created: 2016/01/27 16:53:20 by pdelefos          #+#    #+#             */
+/*   Updated: 2016/01/27 18:39:03 by pdelefos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-char	*str_clnjoin(char *s1, char *s2)
+static void		add_buff(char **line, char *str)
 {
-	char	*merged;
-
-	merged = ft_strjoin(s1, s2);
-	free(s1);
-	return (merged);
-}
-
-int		sizeofline(char *buff, char *last_nl)
-{
-	return (ft_strlen(buff) - ft_strlen(last_nl));
-}
-
-char	*get_last(char **last_nl, char **line)
-{
+	int		i;
+	int		len;
 	char	*tmp;
-	int		size;
 
-	tmp = *last_nl;
-	if ((tmp = ft_strchr(*last_nl, '\n')) != NULL)
+	i = 0;
+	if (*line)
 	{
-		size = sizeofline(*last_nl, tmp);
-		*line = ft_strsub(*last_nl, 0, size);
-		return (*last_nl + size);
+		tmp = ft_strdup(*line);
+		free(*line);
+		len = ft_strlen(tmp) + ft_strlen(str);
+		*line = (char*)ft_memalloc(len + 1);
+		ft_strcpy(*line, tmp);
+		free(tmp);
+		while ((*line)[i])
+			i++;
 	}
-	*line = ft_strdup(*last_nl);
-	return (*last_nl + ft_strlen(*last_nl));
+	else
+	{
+		len = ft_strlen(str);
+		*line = (char*)ft_memalloc(len + 1);
+	}
+	while (*str && *str != '\n')
+		(*line)[i++] = *str++; 
+	(*line)[i] = '\0';
 }
 
-int		split_buff(char *buff, char **last_nl, char **line)
+static char		*get_after_nl(char *str)
 {
-	if ((*last_nl = ft_strchr(buff, '\n')) != NULL)
+	while (*str && *str != '\n')
+		str++;
+	if (*str == '\n' && str[1] != '\0')
+		return (ft_strdup(++str));
+	else
+		return (NULL);
+}
+
+static int		init_next_line(char **line, char **after_nl)
+{
+	char *tmp;
+
+	if (*after_nl && ft_strchr(*after_nl, '\n'))
 	{
-		*last_nl = ft_strsub(buff, sizeofline(buff, *last_nl),
-					ft_strlen(*last_nl)) + 1;
-		if (*line)
-			*line = str_clnjoin(*line, ft_strsub(buff, 0,
-					sizeofline(buff, *last_nl) - 1));
-		else
-			*line = ft_strdup(ft_strsub(buff, 0,
-					sizeofline(buff, *last_nl) - 1));
+		add_buff(line,* after_nl);
+		tmp = *after_nl;
+		*after_nl = get_after_nl(tmp);
+		free(tmp);
 		return (1);
 	}
-	if (*line)
-		*line = str_clnjoin(*line, buff);
-	else
-		*line = ft_strdup(buff);
+	else if (*after_nl && !ft_strchr(*after_nl, '\n'))
+	{
+		*line = ft_strdup(*after_nl);
+		free(*after_nl);
+		after_nl = NULL;
+	}
 	return (0);
 }
 
-int		get_next_line(int const fd, char **line)
+static int		check_last_line(char **line, char **after_nl, int const fd)
 {
-	static char	*last_nl;
-	int			ret;
-	char		buff[BUFF_SIZE + 1];
-
-	if (fd < 0 || BUFF_SIZE < 1 || line == NULL ||
-		(*line = ft_strnew(BUFF_SIZE + 1)) == NULL)
+	if (line)
+		*line = NULL;
+	else
+		return(-1);
+	if (BUFF_SIZE <= 0 || fd < 0)
 		return (-1);
-	if (last_nl)
+	if (init_next_line(line, after_nl))
+		return (1);
+	return (0);
+}
+
+int				get_next_line(int const fd, char **line)
+{
+	int			check;
+	int			ret;
+	char		*buff;
+	static char	*after_nl = NULL;
+
+	check = check_last_line(line, &after_nl, fd);
+	if (check != 0)
+		return (check);
+	buff = ft_strnew(BUFF_SIZE);
+	while ((ret = read(fd, buff, BUFF_SIZE)) > 0 && !ft_strchr(buff, '\n'))
 	{
-		last_nl = get_last(&last_nl, line);
-		if (*last_nl == '\n')
-		{
-			last_nl++;
-			return (1);
-		}
+		add_buff(line, buff);
+		ft_bzero(buff, BUFF_SIZE + 1);
 	}
-	while ((ret = read(fd, buff, BUFF_SIZE)) > 0)
+	if (ret > 0)	
 	{
 		buff[ret] = '\0';
-		if (split_buff(buff, &last_nl, line) == 1)
-			return (1);
+		add_buff(line, buff);
+		after_nl = get_after_nl(buff);
 	}
-	if (ret == 0)
-		return (0);
-	return (-1);
+	free(buff);
+	ret = (ret > 0) ? 1 : ret;
+	ret = (ret == 0 && *line != NULL) ? 1 : ret;
+	return (ret);
 }

@@ -6,7 +6,7 @@
 /*   By: pdelefos <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/29 18:46:27 by pdelefos          #+#    #+#             */
-/*   Updated: 2016/01/29 19:21:27 by pdelefos         ###   ########.fr       */
+/*   Updated: 2016/01/30 14:36:44 by pdelefos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static int	add_line(char **line, char *stock)
 	{
 		*nl = '\0';
 		*line = ft_strdup(stock);
-		++nl;
+		nl++;
 		ft_memmove(stock, nl, ft_strlen(nl) + 1);
 		return (1);
 	}
